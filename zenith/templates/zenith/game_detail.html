@@ -1,0 +1,128 @@
+{% extends 'zenith/base.html' %}
+
+{% block title %}{{ game.title }} - ZENITH{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+
+    <!-- Back Link -->
+    <a href="{% url 'games_list' %}" class="back-link">← Back to Games</a>
+
+    <div class="detail-container">
+        
+        <!-- Left Column: Game Info -->
+        <div class="detail-main">
+            
+            <div class="detail-header">
+                <div class="detail-badges">
+                    <span class="sport-tag sport-tag-lg">{{ game.get_sport_display }}</span>
+                    {% if game.is_full %}
+                        <span class="status-badge status-full">● Game Full</span>
+                    {% else %}
+                        <span class="status-badge status-open">● Open to Join</span>
+                    {% endif %}
+                </div>
+                <h1 class="detail-title">{{ game.title }}</h1>
+            </div>
+
+            <!-- Game Details Grid -->
+            <div class="detail-info-grid">
+                <div class="detail-info-item">
+                    <span class="detail-info-icon">📍</span>
+                    <div>
+                        <span class="detail-info-label">Location</span>
+                        <span class="detail-info-value">{{ game.location }}</span>
+                    </div>
+                </div>
+                <div class="detail-info-item">
+                    <span class="detail-info-icon">📅</span>
+                    <div>
+                        <span class="detail-info-label">Date</span>
+                        <span class="detail-info-value">{{ game.date }}</span>
+                    </div>
+                </div>
+                <div class="detail-info-item">
+                    <span class="detail-info-icon">🕐</span>
+                    <div>
+                        <span class="detail-info-label">Time</span>
+                        <span class="detail-info-value">{{ game.time }}</span>
+                    </div>
+                </div>
+                <div class="detail-info-item">
+                    <span class="detail-info-icon">👥</span>
+                    <div>
+                        <span class="detail-info-label">Players</span>
+                        <span class="detail-info-value">{{ game.players_count }} / {{ game.players_needed }} Joined</span>
+                    </div>
+                </div>
+                <div class="detail-info-item">
+                    <span class="detail-info-icon">🎯</span>
+                    <div>
+                        <span class="detail-info-label">Hosted By</span>
+                        <span class="detail-info-value">{{ game.host.username }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            {% if game.description %}
+            <div class="detail-description">
+                <h3>About This Game</h3>
+                <p>{{ game.description }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Players List -->
+            {% if game.players.all %}
+            <div class="players-section">
+                <h3>Joined Players ({{ game.players_count }})</h3>
+                <div class="players-list">
+                    {% for player in game.players.all %}
+                    <span class="player-chip">👤 {{ player.username }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Right Column: Actions Panel -->
+        <div class="detail-sidebar">
+            <div class="action-panel">
+                <h3>Actions</h3>
+                
+                {% if is_host %}
+                    <!-- Host can edit/delete their own game -->
+                    <p class="host-notice">You are the host of this game</p>
+                    <a href="{% url 'edit_game' game.id %}" class="btn-primary btn-full">Edit Game</a>
+                    <a href="{% url 'delete_game' game.id %}" class="btn-danger btn-full">Delete Game</a>
+                    
+                {% elif has_joined %}
+                    <!-- User has already joined -->
+                    <p class="joined-notice">✅ You've joined this game!</p>
+                    <form method="POST" action="{% url 'leave_game' game.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-secondary btn-full">Leave Game</button>
+                    </form>
+                    
+                {% elif game.is_full %}
+                    <!-- Game is full -->
+                    <p class="full-notice">Sorry, this game is full.</p>
+                    <button class="btn-disabled btn-full" disabled>Game Full</button>
+                    
+                {% else %}
+                    <!-- Available to join -->
+                    <p class="available-notice">{{ game.players_needed|add:"-"|add:game.players_count }} spots remaining!</p>
+                    <form method="POST" action="{% url 'join_game' game.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-primary btn-full">Join This Game</button>
+                    </form>
+                {% endif %}
+                
+                <a href="{% url 'games_list' %}" class="btn-secondary btn-full" style="margin-top:10px;">Back to Games</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'zenith/base.html' %}
+
+{% block title %}Delete Game - ZENITH{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="form-container confirm-container">
+        
+        <div class="confirm-icon">⚠️</div>
+        <h1 class="page-title">Delete Game</h1>
+        <p class="confirm-message">
+            Are you sure you want to delete <strong>"{{ game.title }}"</strong>?
+        </p>
+        <p class="confirm-warning">This action cannot be undone. All joined players will be removed.</p>
+        
+        <div class="form-actions confirm-actions">
+            <!-- POST form to actually delete -->
+            <form method="POST" action="{% url 'delete_game' game.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger btn-large">Yes, Delete Game</button>
+            </form>
+            <a href="{% url 'game_detail' game.id %}" class="btn-secondary btn-large">Cancel</a>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

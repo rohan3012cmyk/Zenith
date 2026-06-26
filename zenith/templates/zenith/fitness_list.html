@@ -1,0 +1,81 @@
+{% extends 'zenith/base.html' %}
+
+{% block title %}Fitness Sessions - ZENITH{% endblock %}
+
+{% block content %}
+<div class="list-page">
+
+    <div class="page-header-row">
+        <div>
+            <h1 class="page-title">Fitness Sessions</h1>
+            <p class="page-subtitle">Group fitness activities in your area</p>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <form method="GET" action="{% url 'fitness_list' %}" class="filter-bar">
+        <select name="activity" class="filter-select">
+            <option value="">All Activities</option>
+            {% for value, label in activity_choices %}
+            <option value="{{ value }}" {% if activity_filter == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn-primary">Filter</button>
+        {% if activity_filter %}
+        <a href="{% url 'fitness_list' %}" class="btn-secondary">Clear</a>
+        {% endif %}
+    </form>
+
+    {% if sessions %}
+    <div class="games-grid">
+        {% for session in sessions %}
+        <div class="game-card fitness-card">
+            
+            <!-- Activity Type Badge -->
+            <div class="game-card-topbar">
+                {% if session.activity_type == 'running' %}
+                    <span class="sport-tag sport-tag-fitness">🏃 Running</span>
+                {% elif session.activity_type == 'jogging' %}
+                    <span class="sport-tag sport-tag-fitness">🏃 Jogging</span>
+                {% elif session.activity_type == 'walking' %}
+                    <span class="sport-tag sport-tag-fitness">🚶 Walking</span>
+                {% elif session.activity_type == 'cycling' %}
+                    <span class="sport-tag sport-tag-fitness">🚴 Cycling</span>
+                {% endif %}
+            </div>
+            
+            <h3 class="game-title">{{ session.title }}</h3>
+            
+            <div class="game-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📍</span>
+                    <span>{{ session.location }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">📅</span>
+                    <span>{{ session.date }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">🕐</span>
+                    <span>{{ session.time }}</span>
+                </div>
+            </div>
+            
+            {% if session.description %}
+            <p class="game-description-preview">{{ session.description|truncatewords:15 }}</p>
+            {% endif %}
+            
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🏋️</div>
+        <h3>No Fitness Sessions Available</h3>
+        <p>Check back soon! Admins can add fitness sessions from the admin panel.</p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

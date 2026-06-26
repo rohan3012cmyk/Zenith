@@ -1,0 +1,71 @@
+{% extends 'zenith/base.html' %}
+{% load static %}
+
+{% block title %}Register - ZENITH{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-container">
+        
+        <!-- Brand -->
+        <div class="auth-brand">
+            <span class="brand-icon-large">⚡</span>
+            <h1 class="auth-brand-name">ZENITH</h1>
+            <p class="auth-tagline">Join Your Sports Community</p>
+        </div>
+        
+        <!-- Register Form Card -->
+        <div class="auth-card">
+            <h2 class="auth-title">Create Account</h2>
+            <p class="auth-subtitle">Start organizing and joining games</p>
+            
+            <form method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+                
+                <!-- Username Field -->
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <span class="form-error">{{ form.username.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <span class="form-error">{{ form.email.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                        <span class="form-error">{{ form.password1.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                
+                <!-- Confirm Password Field -->
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <span class="form-error">{{ form.password2.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                
+                <button type="submit" class="btn-primary btn-full">Create Account</button>
+            </form>
+            
+            <p class="auth-switch">
+                Already have an account? <a href="{% url 'login' %}">Login here</a>
+            </p>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

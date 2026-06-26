@@ -1,0 +1,109 @@
+{% extends 'zenith/base.html' %}
+
+{% block title %}Games - ZENITH{% endblock %}
+
+{% block content %}
+<div class="list-page">
+
+    <!-- Page Header -->
+    <div class="page-header-row">
+        <div>
+            <h1 class="page-title">Available Games</h1>
+            <p class="page-subtitle">Find and join sports games near you</p>
+        </div>
+        <a href="{% url 'create_game' %}" class="btn-primary">+ Create Game</a>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <form method="GET" action="{% url 'games_list' %}" class="filter-bar">
+        <input 
+            type="text" 
+            name="search" 
+            value="{{ search_query }}" 
+            placeholder="Search games by title or location..." 
+            class="search-input"
+        >
+        <select name="sport" class="filter-select">
+            <option value="">All Sports</option>
+            {% for value, label in sport_choices %}
+            <option value="{{ value }}" {% if sport_filter == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn-primary">Search</button>
+        {% if search_query or sport_filter %}
+        <a href="{% url 'games_list' %}" class="btn-secondary">Clear</a>
+        {% endif %}
+    </form>
+
+    <!-- Games Grid -->
+    {% if games %}
+    <div class="games-grid">
+        {% for game in games %}
+        <div class="game-card">
+            
+            <!-- Card Top Bar -->
+            <div class="game-card-topbar">
+                <span class="sport-tag">{{ game.get_sport_display }}</span>
+                {% if game.is_full %}
+                    <span class="status-badge status-full">● Full</span>
+                {% else %}
+                    <span class="status-badge status-open">● Open</span>
+                {% endif %}
+            </div>
+            
+            <!-- Game Title -->
+            <h3 class="game-title">{{ game.title }}</h3>
+            
+            <!-- Game Details -->
+            <div class="game-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📍</span>
+                    <span>{{ game.location }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">📅</span>
+                    <span>{{ game.date }} at {{ game.time }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">👥</span>
+                    <span>{{ game.players_count }} / {{ game.players_needed }} Players</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">🎯</span>
+                    <span>Host: {{ game.host.username }}</span>
+                </div>
+            </div>
+            
+            <!-- Description Preview -->
+            {% if game.description %}
+            <p class="game-description-preview">{{ game.description|truncatewords:15 }}</p>
+            {% endif %}
+            
+            <!-- Action Button -->
+            <div class="game-card-actions">
+                <a href="{% url 'game_detail' game.id %}" class="btn-primary btn-sm">View Details</a>
+                {% if request.user == game.host %}
+                    <span class="host-badge">You're the host</span>
+                {% endif %}
+            </div>
+            
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% else %}
+    <!-- Empty state when no games found -->
+    <div class="empty-state">
+        <div class="empty-icon">🏟️</div>
+        <h3>No Games Found</h3>
+        {% if search_query or sport_filter %}
+            <p>No games match your search. <a href="{% url 'games_list' %}">View all games</a></p>
+        {% else %}
+            <p>No games available yet. Be the first to organize one!</p>
+            <a href="{% url 'create_game' %}" class="btn-primary">Create First Game</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

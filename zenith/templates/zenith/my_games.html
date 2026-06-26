@@ -1,0 +1,77 @@
+{% extends 'zenith/base.html' %}
+
+{% block title %}My Games - ZENITH{% endblock %}
+
+{% block content %}
+<div class="list-page">
+    
+    <div class="page-header-row">
+        <div>
+            <h1 class="page-title">My Games</h1>
+            <p class="page-subtitle">Games you've created and joined</p>
+        </div>
+        <a href="{% url 'create_game' %}" class="btn-primary">+ Create New Game</a>
+    </div>
+
+    <!-- Games I Created (Hosted) -->
+    <h2 class="section-heading">Games I Created ({{ hosted_games.count }})</h2>
+    
+    {% if hosted_games %}
+    <div class="games-grid">
+        {% for game in hosted_games %}
+        <div class="game-card game-card-hosted">
+            <div class="game-card-topbar">
+                <span class="sport-tag">{{ game.get_sport_display }}</span>
+                <span class="host-badge-sm">Host</span>
+            </div>
+            <h3 class="game-title">{{ game.title }}</h3>
+            <div class="game-meta">
+                <div class="meta-item"><span class="meta-icon">📍</span><span>{{ game.location }}</span></div>
+                <div class="meta-item"><span class="meta-icon">📅</span><span>{{ game.date }}</span></div>
+                <div class="meta-item"><span class="meta-icon">👥</span><span>{{ game.players_count }}/{{ game.players_needed }}</span></div>
+            </div>
+            <div class="game-card-actions">
+                <a href="{% url 'game_detail' game.id %}" class="btn-sm-primary">View</a>
+                <a href="{% url 'edit_game' game.id %}" class="btn-sm-secondary">Edit</a>
+                <a href="{% url 'delete_game' game.id %}" class="btn-sm-danger">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state-sm">
+        <p>You haven't created any games yet. <a href="{% url 'create_game' %}">Create your first game!</a></p>
+    </div>
+    {% endif %}
+
+    <!-- Games I Joined -->
+    <h2 class="section-heading" style="margin-top: 40px;">Games I Joined ({{ joined_games.count }})</h2>
+    
+    {% if joined_games %}
+    <div class="games-grid">
+        {% for game in joined_games %}
+        <div class="game-card">
+            <div class="game-card-topbar">
+                <span class="sport-tag">{{ game.get_sport_display }}</span>
+                <span class="status-badge status-open">Joined</span>
+            </div>
+            <h3 class="game-title">{{ game.title }}</h3>
+            <div class="game-meta">
+                <div class="meta-item"><span class="meta-icon">📍</span><span>{{ game.location }}</span></div>
+                <div class="meta-item"><span class="meta-icon">📅</span><span>{{ game.date }}</span></div>
+                <div class="meta-item"><span class="meta-icon">🎯</span><span>Host: {{ game.host.username }}</span></div>
+            </div>
+            <div class="game-card-actions">
+                <a href="{% url 'game_detail' game.id %}" class="btn-sm-primary">View</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state-sm">
+        <p>You haven't joined any games yet. <a href="{% url 'games_list' %}">Browse available games!</a></p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

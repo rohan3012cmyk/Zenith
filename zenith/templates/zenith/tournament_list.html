@@ -1,0 +1,60 @@
+{% extends 'zenith/base.html' %}
+
+{% block title %}Tournaments - ZENITH{% endblock %}
+
+{% block content %}
+<div class="list-page">
+
+    <div class="page-header-row">
+        <div>
+            <h1 class="page-title">Tournaments</h1>
+            <p class="page-subtitle">Local sports tournaments and competitions</p>
+        </div>
+    </div>
+
+    {% if tournaments %}
+    <div class="games-grid">
+        {% for tournament in tournaments %}
+        <div class="game-card tournament-card">
+            
+            <div class="game-card-topbar">
+                <span class="sport-tag sport-tag-tournament">🏆 {{ tournament.get_sport_display }}</span>
+            </div>
+            
+            <h3 class="game-title">{{ tournament.name }}</h3>
+            
+            <div class="game-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📍</span>
+                    <span>{{ tournament.location }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">📅</span>
+                    <span>{{ tournament.start_date }} → {{ tournament.end_date }}</span>
+                </div>
+                {% if tournament.prize_pool %}
+                <div class="meta-item">
+                    <span class="meta-icon">🏅</span>
+                    <span>Prize Pool: {{ tournament.prize_pool }}</span>
+                </div>
+                {% endif %}
+            </div>
+            
+            {% if tournament.description %}
+            <p class="game-description-preview">{{ tournament.description|truncatewords:20 }}</p>
+            {% endif %}
+            
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🏆</div>
+        <h3>No Tournaments Announced Yet</h3>
+        <p>Tournaments will be listed here once they are announced. Check back soon!</p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

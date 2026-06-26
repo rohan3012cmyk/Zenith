@@ -1,0 +1,108 @@
+{% extends 'zenith/base.html' %}
+
+{% block title %}Dashboard - ZENITH{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    
+    <!-- Welcome Header -->
+    <div class="page-header">
+        <h1 class="page-title">Welcome back, <span class="highlight">{{ user.username }}</span> ⚡</h1>
+        <p class="page-subtitle">Here's what's happening in your sports community today.</p>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card stat-games">
+            <div class="stat-icon">🏏</div>
+            <div class="stat-info">
+                <span class="stat-number">{{ total_games }}</span>
+                <span class="stat-label">Available Games</span>
+            </div>
+        </div>
+        
+        <div class="stat-card stat-fitness">
+            <div class="stat-icon">🏃</div>
+            <div class="stat-info">
+                <span class="stat-number">{{ total_fitness }}</span>
+                <span class="stat-label">Fitness Sessions</span>
+            </div>
+        </div>
+        
+        <div class="stat-card stat-tournaments">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-info">
+                <span class="stat-number">{{ total_tournaments }}</span>
+                <span class="stat-label">Tournaments</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Action Cards -->
+    <h2 class="section-heading">Quick Actions</h2>
+    <div class="action-grid">
+        
+        <a href="{% url 'games_list' %}" class="action-card">
+            <div class="action-icon">⚽</div>
+            <h3>Browse Games</h3>
+            <p>Find and join local sports games near you</p>
+        </a>
+        
+        <a href="{% url 'create_game' %}" class="action-card action-card-accent">
+            <div class="action-icon">➕</div>
+            <h3>Create a Game</h3>
+            <p>Organize a new game and invite players</p>
+        </a>
+        
+        <a href="{% url 'fitness_list' %}" class="action-card">
+            <div class="action-icon">🏋️</div>
+            <h3>Fitness Sessions</h3>
+            <p>Join group fitness and workout activities</p>
+        </a>
+        
+        <a href="{% url 'tournament_list' %}" class="action-card">
+            <div class="action-icon">🏅</div>
+            <h3>Tournaments</h3>
+            <p>Check upcoming local tournaments</p>
+        </a>
+        
+        <a href="{% url 'my_games' %}" class="action-card">
+            <div class="action-icon">📋</div>
+            <h3>My Games</h3>
+            <p>View and manage your created games</p>
+        </a>
+        
+    </div>
+
+    <!-- Recent Games Preview -->
+    {% if recent_games %}
+    <h2 class="section-heading">Recent Games</h2>
+    <div class="recent-games-grid">
+        {% for game in recent_games %}
+        <div class="game-card-small">
+            <div class="game-card-header">
+                <span class="sport-badge-small">{{ game.get_sport_display }}</span>
+                {% if game.is_full %}
+                    <span class="status-badge status-full">Full</span>
+                {% else %}
+                    <span class="status-badge status-open">Open</span>
+                {% endif %}
+            </div>
+            <h4 class="game-card-title">{{ game.title }}</h4>
+            <div class="game-card-details">
+                <span>📍 {{ game.location }}</span>
+                <span>📅 {{ game.date }}</span>
+                <span>👥 {{ game.players_count }}/{{ game.players_needed }} Players</span>
+            </div>
+            <a href="{% url 'game_detail' game.id %}" class="btn-sm-primary">View Game</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No games available yet. <a href="{% url 'create_game' %}">Be the first to create one!</a></p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

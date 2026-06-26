@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ZENITH - Sports Community{% endblock %}</title>
+    
+    <!-- Load our custom CSS file -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'zenith/css/style.css' %}">
+    
+    <!-- Google Fonts - Rajdhani for sporty headings, Exo 2 for body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ===== NAVIGATION BAR ===== -->
+    {% if user.is_authenticated %}
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo / Brand name -->
+            <a href="{% url 'dashboard' %}" class="nav-brand">
+                <span class="brand-icon">⚡</span> ZENITH
+            </a>
+            
+            <!-- Navigation links (hidden on mobile, shown via JS toggle) -->
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a></li>
+                <li><a href="{% url 'games_list' %}" class="nav-link">Games</a></li>
+                <li><a href="{% url 'fitness_list' %}" class="nav-link">Fitness</a></li>
+                <li><a href="{% url 'tournament_list' %}" class="nav-link">Tournaments</a></li>
+                <li><a href="{% url 'my_games' %}" class="nav-link">My Games</a></li>
+            </ul>
+            
+            <!-- Right side: username + logout -->
+            <div class="nav-user">
+                <span class="nav-username">👤 {{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
+            </div>
+            
+            <!-- Mobile hamburger menu button -->
+            <button class="hamburger" onclick="toggleNav()" id="hamburger">☰</button>
+        </div>
+    </nav>
+    {% endif %}
+
+    <!-- ===== FLASH MESSAGES ===== -->
+    <!-- Django messages are like toast notifications - they show once then disappear -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+            <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <!-- Each page fills in this block with its own content -->
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <p>⚡ ZENITH - Hyperlocal Sports & Fitness Community | BCA Final Year Project</p>
+    </footer>
+
+    <!-- JavaScript for mobile nav toggle -->
+    <script>
+        function toggleNav() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('nav-open');
+        }
+        
+        // Auto-close messages after 4 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 4000);
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

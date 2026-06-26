@@ -1,0 +1,79 @@
+{% extends 'zenith/base.html' %}
+{% load static %}
+
+{% block title %}ZENITH - Find Your Game{% endblock %}
+
+{% block content %}
+<div class="home-page">
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-bg-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-badge">⚡ Hyperlocal Sports Platform</div>
+            <h1 class="hero-title">
+                ZENITH
+                <span class="hero-subtitle-text">Sports & Fitness Community</span>
+            </h1>
+            <p class="hero-description">
+                Find local players. Organize games. Join fitness sessions. 
+                Connect with sports lovers in your city.
+            </p>
+            <div class="hero-buttons">
+                <a href="{% url 'register' %}" class="btn-primary">Get Started Free</a>
+                <a href="{% url 'login' %}" class="btn-secondary">Login</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <h2 class="section-title">What is ZENITH?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🏏</div>
+                <h3>Organize Games</h3>
+                <p>Create a sports game and find players in your area. Cricket, Football, Badminton and more.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏃</div>
+                <h3>Fitness Sessions</h3>
+                <p>Discover morning jogs, cycling sessions, and walking groups near you.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Local Tournaments</h3>
+                <p>Stay updated on upcoming tournaments and competitions in your locality.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤝</div>
+                <h3>Build Community</h3>
+                <p>Connect with sports enthusiasts in your neighborhood and build lasting friendships.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sports Section -->
+    <section class="sports-section">
+        <h2 class="section-title">Supported Sports</h2>
+        <div class="sports-grid">
+            <div class="sport-badge">🏏 Cricket</div>
+            <div class="sport-badge">⚽ Football</div>
+            <div class="sport-badge">🏐 Volleyball</div>
+            <div class="sport-badge">🏸 Badminton</div>
+            <div class="sport-badge">🤼 Kabaddi</div>
+            <div class="sport-badge">🏃 Kho-Kho</div>
+            <div class="sport-badge">🏅 Marathon</div>
+            <div class="sport-badge">🏀 Basketball</div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Play?</h2>
+        <p>Join ZENITH today and never miss a game in your city.</p>
+        <a href="{% url 'register' %}" class="btn-primary btn-large">Create Your Account</a>
+    </section>
+
+</div>
+{% endblock %}
